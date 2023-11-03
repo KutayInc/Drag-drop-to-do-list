@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="todostyle.css" />
+    <script
+      type="text/javascript"
+      src="https://npmcdn.com/parse/dist/parse.min.js"
+    ></script>
+  </head>
+  <body>
+    <div id="cover-spin"></div>
+    <div class="wrapper">
+      <div class="header">
+        <h1>Example Board</h1>
+        <div class="mail">kutay@inc</div>
+        <button class="logout">Logout</button>
+      </div>
+      <div class="secondWrapper">
+        <div class="content"></div>
+        <div class="listButton">
+          <div class="newListWrapper">
+            <button id="newList">Add New List</button>
+            <input
+              type="text"
+              id="listTitleInput"
+              style="display: none"
+              placeholder="Enter list title"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="login" style="display: none"></div>
+    <button id="showt">Goster</button>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
