@@ -10,7 +10,7 @@
   overflow-x: scroll;
 }
 
-.header{
+.header {
   display: flex;
   justify-content: center;
 }
@@ -20,7 +20,7 @@
   color: white;
 }
 
-.mail{
+.mail {
   border: 1px solid black;
   border-radius: 15px;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
@@ -42,6 +42,7 @@
   width: 100%;
   overflow-x: auto;
   align-items: flex-start;
+  padding: 15px;
 }
 
 .newListWrapper {
@@ -61,8 +62,8 @@
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
 }
 
-.addedDiv{
-  background-color : #f7f7f7;
+.addedDiv {
+  background-color: #f7f7f7;
   width: 20em;
   border: none;
   border-radius: 15px;
@@ -70,7 +71,7 @@
   margin: 10px;
   position: relative;
   display: flex;
-  flex-wrap : wrap;
+  flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
@@ -119,6 +120,7 @@
   justify-content: center;
   flex-direction: column-reverse;
   align-items: center;
+  padding: 5px;
 }
 
 input {
@@ -137,37 +139,50 @@ input {
 }
 
 #cover-spin {
-  position:fixed;
-  width:100%;
-  left:0;right:0;top:0;bottom:0;
-  background-color: rgba(255,255,255,0.7);
-  z-index:9999;
-  display:none;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+  display: none;
 }
 @-webkit-keyframes spin {
-from {-webkit-transform:rotate(0deg);}
-to {-webkit-transform:rotate(360deg);}
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
 }
 @keyframes spin {
-from {transform:rotate(0deg);}
-to {transform:rotate(360deg);}
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 #cover-spin::after {
-  content:'';
-  display:block;
-  position:absolute;
-  left:48%;top:40%;
-  width:40px;height:40px;
-  border-style:solid;
-  border-color:black;
-  border-top-color:transparent;
+  content: "";
+  display: block;
+  position: absolute;
+  left: 48%;
+  top: 40%;
+  width: 40px;
+  height: 40px;
+  border-style: solid;
+  border-color: black;
+  border-top-color: transparent;
   border-width: 4px;
-  border-radius:50%;
-  -webkit-animation: spin .8s linear infinite;
-  animation: spin .8s linear infinite;
+  border-radius: 50%;
+  -webkit-animation: spin 0.8s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
-.logout{
+.logout {
   position: absolute;
   right: 20px;
   border: 1px solid black;

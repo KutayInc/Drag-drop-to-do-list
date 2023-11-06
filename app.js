@@ -29,7 +29,7 @@ $(document).ready(function () {
             if (title !== "") {
               //title getiren kısım
               var addedDiv =
-                '<div class="addedDiv"><h2 class="listTitle" id="' +
+                '<div class="addedDiv sortable"><h2 class="listTitle" id="' +
                 objId +
                 '">' +
                 title +
@@ -104,7 +104,7 @@ $(document).ready(function () {
       if (title !== "") {
         var objId = await saveList(title);
         var addedDiv =
-          '<div class="addedDiv"><h2 class="listTitle" id="' +
+          '<div class="addedDiv sortable"><h2 class="listTitle" id="' +
           objId +
           '">' +
           title +
@@ -154,6 +154,19 @@ $(document).ready(function () {
             cardInfo +
             '<div class="removeCard"><img src="close-img.png" alt=""></div></div>';
           $(this).closest(".rowDiv").append(card);
+          $(".rowDiv").sortable();
+          $(".rowDiv").disableSelection();
+          $(".draggable").draggable({
+            cursor: "grabbing",
+            opacity: "0.5",
+            revert: true,
+          });
+          $(".rowDiv").droppable({
+            accept: ".draggable",
+            drop: function (event, ui) {
+              ui.helper.appendTo(this);
+            },
+          });
 
           cardInfoInput.val("").css("display", "none");
 
