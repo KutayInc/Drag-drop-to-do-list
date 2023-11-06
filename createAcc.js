@@ -4,30 +4,44 @@ Parse.initialize(
 );
 Parse.serverURL = "https://parseapi.back4app.com/";
 
-async function createParseUser() {
+async function createParseUser(username, email, password) {
   // Creates a new Parse "User" object, which is created by default in your Parse app
   let user = new Parse.User();
-  // Set the input values to the new "User" object
-  user.set("username", document.getElementById("username").value);
-  user.set("email", document.getElementById("email").value);
-  user.set("password", document.getElementById("password").value);
+  user.set("username", username);
+  user.set("email", email);
+  user.set("password", password);
   try {
     // Call the save method, which returns the saved object if successful
     user = await user.save();
     if (user !== null) {
       // Notify the success by getting the attributes from the "User" object, by using the get method (the id attribute needs to be accessed directly, though)
-      alert(
-        `New object created with success! ObjectId: ${user.id}, ${user.get(
-          "username"
-        )}`
-      );
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: `New Account created. Welcome ${user.get("username")}`,
+      });
     }
   } catch (error) {
-    alert(`Error: ${error.message}`);
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: error.message,
+    });
   }
 }
 
 // Add on click listener to call the create parse user function
 document.getElementById("signUp").addEventListener("click", async function () {
-  createParseUser();
+  var username = document.getElementById("username").value;
+  var email = document.getElementById("email").value;
+  var password = document.getElementById("password").value;
+  if (username.length >= 3 && password.length >= 3) {
+    createParseUser(username, email, password);
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!",
+    });
+  }
 });

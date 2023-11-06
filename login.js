@@ -4,34 +4,32 @@ Parse.initialize(
 );
 Parse.serverURL = "https://parseapi.back4app.com/";
 
-export let mail = "";
-
 async function logIn(username, password) {
   // Create a new instance of the user class
   var user = Parse.User.logIn(username, password)
     .then(function (user) {
-      console.log(
-        "User created successful with name: " +
-          user.get("username") +
-          " and email: " +
-          user.get("email")
-      );
-      mail = user.get("email");
+
       window.location.href = "/index.html";
     })
     .catch(function (error) {
-      alert(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.message
     });
+  });
 }
-
-
 
 document.getElementById("login").addEventListener("click", function () {
   var username = document.getElementById("username").value;
   var password = document.getElementById("password").value;
-  logIn(username, password);
+  if (username.length >= 3 && password.length >= 3) {
+    logIn(username, password);
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!",
+    });
+  }
 });
-
-// document.getElementById("show").addEventListener("click", function () {
-//   console.log(mail);
-// });
