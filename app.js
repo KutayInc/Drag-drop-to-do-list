@@ -8,10 +8,12 @@ $(document).ready(function () {
   const currentUser = Parse.User.current();
 
   let mail = "";
+  var titles = [];
   if (currentUser) {
     mail = currentUser.get("email");
     $(".mail").html(`${mail}`);
     getData();
+    console.log(titles);
   }
 
   function getData() {
@@ -23,13 +25,17 @@ $(document).ready(function () {
       query
         .find()
         .then((results) => {
+          results.sort((a, b) => a.get("Order") - b.get("Order"));
           for (const result of results) {
             const title = result.get("listName");
+            var order = result.get("Order");
             const objId = result.id;
             if (title !== "") {
               //title getiren kısım
               var addedDiv =
-                '<div class="addedDiv sortable"><h2 class="listTitle" id="' +
+                '<div class="addedDiv sortable" id="' +
+                order +
+                '"><h2 class="listTitle" id="' +
                 objId +
                 '">' +
                 title +
@@ -37,7 +43,8 @@ $(document).ready(function () {
                 '<div class="rowDiv"><div class="row"><button class="newCard">Add New Card</button>' +
                 '<input type="text" class="cardInfoInput" style="display: none;"' +
                 ' placeholder="Enter card info"></div></div></div>';
-              $(".content").prepend(addedDiv);
+              titles.push(order);
+              $(".content").append(addedDiv);
               $(".content").sortable();
               $(".content").disableSelection();
             }
@@ -93,6 +100,44 @@ $(document).ready(function () {
     saveCard(card, newList);
   });
 
+  $(".content").sortable({
+    start: function (event, ui) {
+      // Sıralama işlemi başladığında çalışacak kod
+      console.log("Sıralama işlemi başladı");
+    },
+    stop: function (event, ui) {
+      //console.log(objectId);
+      updateAddedDivOrder();
+      console.log("Sıralama işlemi bitti");
+    },
+  });
+
+  function updateAddedDivOrder() {
+    $(".addedDiv").each(function (index) {
+      const order = index + 1;
+      const objectId = $(this).find(".listTitle").attr("id");
+      $(this).attr("id", order);
+      updateObjectOrder(order, objectId);
+    });
+  }
+
+  function updateObjectOrder(order, objectId) {
+    const board = Parse.Object.extend("Board");
+    const query = new Parse.Query(board);
+    query.equalTo("objectId", objectId);
+    query.first().then(function (object) {
+      try {
+        object.set("Order", order);
+        object.save();
+        console.log("saved");
+        $("#cover-spin").hide(0);
+      } catch (error) {
+        console.log("Error code: " + error);
+        $("#cover-spin").hide(0);
+      }
+    });
+  }
+
   //Add New List butonu
   $("#newList").click(function (e) {
     $("#listTitleInput").css("display", "inline-block").focus();
@@ -101,10 +146,13 @@ $(document).ready(function () {
   $("#listTitleInput").keypress(async function (e) {
     if (e.which === 13) {
       var title = $(this).val().trim();
+      var order = titles.length + 1;
       if (title !== "") {
-        var objId = await saveList(title);
+        var objId = await saveList(title, order);
         var addedDiv =
-          '<div class="addedDiv sortable"><h2 class="listTitle" id="' +
+          '<div class="addedDiv sortable" id="' +
+          order +
+          '"><h2 class="listTitle" id="' +
           objId +
           '">' +
           title +
@@ -115,16 +163,18 @@ $(document).ready(function () {
         $(".content").sortable();
         $(".content").disableSelection();
         $(this).val("").css("display", "none");
+        titles.unshift(order);
+        console.log(titles);
       }
     }
   });
 
-  async function saveList(title) {
+  async function saveList(title, order) {
     $("#cover-spin").show(0);
     const board = new Parse.Object("Board");
     board.set("listName", title);
     board.set("mail", mail);
-
+    board.set("Order", order);
     try {
       const savedBoard = await board.save();
       const objId = savedBoard.id;
@@ -197,10 +247,11 @@ $(document).ready(function () {
 
   //Silme işlemleri için
   $(".content").on("click", ".removeList", function () {
+    var order = $(this).closest(".addedDiv").attr("id");
     var parentList = $(this).closest(".addedDiv");
     var parentListId = parentList.find(".listTitle").attr("id");
     $(this).closest(".addedDiv").remove();
-    deleteList(parentList, parentListId);
+    deleteList(parentList, parentListId, order);
   });
   $(".content").on("click", ".removeCard", function () {
     var removingCard = $(this).closest(".addedCard").text();
@@ -214,15 +265,19 @@ $(document).ready(function () {
     $(this).css("display", "inline-block").focus();
   });
 
-  function deleteList(parentList, parentListId) {
+  function deleteList(parentList, parentListId, order) {
     $("#cover-spin").show(0);
     const board = Parse.Object.extend("Board");
     const query = new Parse.Query(board);
+    const deletedTitle = titles.findIndex((item) => item == order);
+    console.log(deletedTitle);
     query.equalTo("objectId", parentListId);
     query.first().then(function (object) {
       try {
         object.destroy();
+        titles.splice(deletedTitle, 1);
         console.log("deleted");
+        console.log(titles);
         $("#cover-spin").hide(0);
       } catch (error) {
         console.log("Error code: " + error);
