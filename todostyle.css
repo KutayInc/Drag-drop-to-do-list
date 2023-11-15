@@ -58,6 +58,7 @@
 
 .listTitle {
   font-weight: 500;
+  font-size: 30px;
 }
 
 .newListWrapper {
@@ -100,11 +101,13 @@
 .addedCard {
   border: 1px solid rgba(0, 0, 0, 0.342);
   border-radius: 5px;
-  width: 15em;
+  width: 14em;
   margin: 10px;
   padding: 10px;
   z-index: 2;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
+  font-weight: 400;
+  font-size: 20px;
 }
 
 .row {
