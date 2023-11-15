@@ -3,11 +3,46 @@
   font-family: "Roboto", sans-serif;
 }
 
-.head{
+.head {
+  display: flex;
   width: 100%;
-  height: 4em;
+  height: 5em;
   background-color: #839bf1;
+  position: relative;
+}
 
+.logo {
+  margin: 15px;
+  height: 70%;
+}
+
+.img-dropdown {
+  position: absolute;
+  width: 65px;
+  height: auto;
+  right: 0px;
+  margin: 8px 10px;
+}
+
+.prof-img {
+  display: inline-block;
+  width: 65px;
+  height: auto;
+}
+
+.dropdown {
+  position: relative;
+  width: auto;
+  height: auto;
+}
+
+.img-dropdown:hover .mail,
+.img-dropdown:hover .logout {
+  display: block;
+}
+.info:hover .mail,
+.info:hover .logout {
+  display: block;
 }
 
 .wrapper {
@@ -32,18 +67,6 @@
   background-color: #617ee9;
   color: white;
   font-weight: 700;
-}
-
-.mail {
-  border: 1px solid black;
-  border-radius: 15px;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
-  position: absolute;
-  right: 115px;
-  top: 21px;
-  padding: 15px;
-  background-color: bisque;
-  font-size: 15px;
 }
 
 .secondWrapper {
@@ -87,7 +110,7 @@
   cursor: pointer;
 }
 
-#newList:hover{
+#newList:hover {
   background-color: #ffc2ae;
 }
 
@@ -135,7 +158,7 @@
   cursor: pointer;
 }
 
-.row button:hover{
+.row button:hover {
   background-color: #ffa7e5;
 }
 
@@ -227,19 +250,42 @@ input {
   animation: spin 0.8s linear infinite;
 }
 
+.info{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
+  top: -10px;
+  min-height: 100px;
+  z-index: 1;
+}
+
 .logout {
-  position: absolute;
-  right: 20px;
   border: 1px solid black;
-  border-radius: 15px;
+  border-radius: 0 0 0 15px;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
-  top: 21px;
-  padding: 15px;
   background-color: bisque;
   cursor: pointer;
   font-size: 15px;
+  display: none;
+  position: absolute;
+  z-index: 1;
+  top: 65px;
+  padding: 10px;
 }
 
-.logout:hover{
+.logout:hover {
   background-color: rgb(255, 205, 143);
+}
+.mail {
+  border: 1px solid black;
+  border-radius: 15px 0 0 15px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
+  position: absolute;
+  background-color: bisque;
+  font-size: 15px;
+  display: none;
+  z-index: 1;
+  top: 25px;
+  padding: 10px;
 }
