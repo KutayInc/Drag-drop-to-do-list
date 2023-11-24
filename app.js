@@ -28,21 +28,19 @@ $(document).ready(function () {
           results.sort((a, b) => a.get("Order") - b.get("Order"));
           for (const result of results) {
             const title = result.get("listName");
-            var order = result.get("Order");
+            const order = result.get("Order");
             const objId = result.id;
             if (title !== "") {
-              //title getiren kısım
-              var addedDiv =
-                '<div class="addedDiv sortable" id="' +
-                order +
-                '"><h2 class="listTitle" id="' +
-                objId +
-                '">' +
-                title +
-                '</h2><div class="removeList"><img src="close-img.png" alt=""></div>' +
-                '<div class="rowDiv"><div class="row"><button class="newCard">Add New Card</button>' +
-                '<input type="text" class="cardInfoInput" style="display: none;"' +
-                ' placeholder="Enter card info"></div></div></div>';
+              const addedDiv = `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
+                <h2 class="listTitle" >${title}</h2>
+                <div class="removeList"><img src="close-img.png" alt=""></div></div>
+                <div class="rowDiv">
+                  <div class="row">
+                    <button class="newCard">Add New Card</button>
+                    <input type="text" class="cardInfoInput" style="display: none;" placeholder="Enter card info">
+                  </div>
+                </div>
+              </div>`;
               titles.push(order);
               $(".content").append(addedDiv);
               $(".content").sortable();
@@ -52,11 +50,10 @@ $(document).ready(function () {
             cards = result.get("cards");
             if (cards !== undefined) {
               for (let i = 0; i < cards.length; i++) {
-                //kart getiren kısım
-                var card =
-                  '<div class="addedCard draggable" style="position: relative;">' +
-                  cards[i] +
-                  '<div class="removeCard"><img src="close-img.png" alt=""></div></div>';
+                const card = `<div class="addedCard draggable" style="position: relative;">
+                  ${cards[i]}
+                  <div class="removeCard"><img src="close-img.png" alt=""></div>
+                </div>`;
                 $("#" + objId)
                   .siblings()
                   .closest(".rowDiv")
@@ -86,14 +83,20 @@ $(document).ready(function () {
 
   //drag drop yapılırken liste içeriği güncelleme
   $(".content").on("dragstart", ".draggable", function () {
-    var oldList = $(this).closest(".addedDiv").find(".listTitle").attr("id");
+    var oldList = $(this)
+      .closest(".addedDiv")
+      .find(".listTitleWrapper")
+      .attr("id");
     console.log("Old List: " + oldList);
     var card = $(this).text();
     var isDrag = true;
     deleteCard(card, oldList, isDrag);
   });
   $(".content").on("dragstop", ".draggable", function () {
-    var newList = $(this).closest(".addedDiv").find(".listTitle").attr("id");
+    var newList = $(this)
+      .closest(".addedDiv")
+      .find(".listTitleWrapper")
+      .attr("id");
     console.log("New List: " + newList);
     var card = $(this).text();
     console.log(card);
@@ -115,7 +118,7 @@ $(document).ready(function () {
   function updateAddedDivOrder() {
     $(".addedDiv").each(function (index) {
       const order = index + 1;
-      const objectId = $(this).find(".listTitle").attr("id");
+      const objectId = $(this).find(".listTitleWrapper").attr("id");
       $(this).attr("id", order);
       updateObjectOrder(order, objectId);
     });
@@ -149,16 +152,16 @@ $(document).ready(function () {
       var order = titles.length + 1;
       if (title !== "") {
         var objId = await saveList(title, order);
-        var addedDiv =
-          '<div class="addedDiv sortable" id="' +
-          order +
-          '"><h2 class="listTitle" id="' +
-          objId +
-          '">' +
-          title +
-          '</h2><div class="removeList"><img src="close-img.png" alt=""></div>' +
-          '<div class="rowDiv"><div class="row"><button class="newCard">Add New Card</button>' +
-          '<input type="text" class="cardInfoInput" style="display: none;" placeholder="Enter card info"></div></div></div>';
+        var addedDiv = `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
+        <h2 class="listTitle" >${title}</h2>
+        <div class="removeList"><img src="close-img.png" alt=""></div></div>
+        <div class="rowDiv">
+          <div class="row">
+            <button class="newCard">Add New Card</button>
+            <input type="text" class="cardInfoInput" style="display: none;" placeholder="Enter card info">
+          </div>
+        </div>
+      </div>`;
         $(".content").prepend(addedDiv);
         $(".content").sortable();
         $(".content").disableSelection();
@@ -221,7 +224,7 @@ $(document).ready(function () {
           cardInfoInput.val("").css("display", "none");
 
           var parentList = $(this).closest(".addedDiv");
-          var parentListId = parentList.find(".listTitle").attr("id");
+          var parentListId = parentList.find(".listTitleWrapper").attr("id");
           saveCard(cardInfo, parentListId);
         }
       }
@@ -249,20 +252,16 @@ $(document).ready(function () {
   $(".content").on("click", ".removeList", function () {
     var order = $(this).closest(".addedDiv").attr("id");
     var parentList = $(this).closest(".addedDiv");
-    var parentListId = parentList.find(".listTitle").attr("id");
+    var parentListId = parentList.find(".listTitleWrapper").attr("id");
     $(this).closest(".addedDiv").remove();
     deleteList(parentList, parentListId, order);
   });
   $(".content").on("click", ".removeCard", function () {
     var removingCard = $(this).closest(".addedCard").text();
     var parentList = $(this).closest(".addedDiv");
-    var parentListId = parentList.find(".listTitle").attr("id");
+    var parentListId = parentList.find(".listTitleWrapper").attr("id");
     $(this).closest(".addedCard").remove();
     deleteCard(removingCard, parentListId);
-  });
-
-  $(".content").on("click", ".listTitle", function () {
-    $(this).css("display", "inline-block").focus();
   });
 
   function deleteList(parentList, parentListId, order) {

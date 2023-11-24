@@ -3,6 +3,10 @@
   font-family: "Roboto", sans-serif;
 }
 
+*{
+  font-family: "Roboto", sans-serif;
+}
+
 .head {
   display: flex;
   width: 100%;
@@ -34,6 +38,9 @@
   position: relative;
   width: auto;
   height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .img-dropdown:hover .mail,
@@ -43,6 +50,9 @@
 .info:hover .mail,
 .info:hover .logout {
   display: block;
+}
+.img-dropdown:hover .info {
+  display: flex;
 }
 
 .wrapper {
@@ -87,6 +97,18 @@
   padding-top: 15px;
 }
 
+.listTitleWrapper{
+  width: 294px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.listTitleWrapper h2{
+  margin: 11px;
+}
+
 .listTitle {
   font-weight: 500;
   font-size: 28px;
@@ -102,20 +124,23 @@
 #newList {
   width: 20em;
   height: 3em;
-  background-color: #ffdcd0;
+  background-color: #d0d9ff;
   border: none;
   border-radius: 15px;
   margin: 10px;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
   cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.05em;
 }
 
 #newList:hover {
-  background-color: #ffc2ae;
+  background-color: #b2c0fc;
 }
 
 .addedDiv {
-  background-color: #f9f6ee;
+  background-color: #ebecf0;
   width: 20em;
   border: none;
   border-radius: 15px;
@@ -130,15 +155,22 @@
 }
 
 .addedCard {
-  border: 1px solid rgba(0, 0, 0, 0.342);
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0);
   border-radius: 5px;
   width: 14em;
   margin: 10px;
   padding: 10px;
   z-index: 2;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
+  box-shadow: 0px 1px 1px #091e4240, 0px 0px 1px #091e424f;
   font-weight: 400;
   font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.addedCard:hover {
+  border: 1px solid rgb(0, 0, 0);
 }
 
 .row {
@@ -153,21 +185,21 @@
   margin: 10px;
   border: none;
   border-radius: 15px;
-  background-color: #ffd0f1;
+  background-color: #d0d9ff;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
   cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.05em;
 }
 
 .row button:hover {
-  background-color: #ffa7e5;
+  background-color: #b2c0fc;
 }
 
 .removeList,
 .removeCard {
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  padding: 5px;
+  margin: auto 10px
 }
 
 .removeList img,
@@ -250,42 +282,37 @@ input {
   animation: spin 0.8s linear infinite;
 }
 
-.info{
-  display: flex;
+.info {
+  display: none;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   position: relative;
   top: -10px;
   min-height: 100px;
   z-index: 1;
+  margin-top: 15px;
+  width: 185px;
+  justify-content: space-evenly;
+  background-color: #ebecf0;
+  border-radius: 8px;
+}
+
+.info li {
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 8px;
+  background-color: #ffffff00;
+  font-size: 15px;
+  display: none;
+  z-index: 1;
+  padding: 10px;
+  width: 135px;
+  text-align: center;
 }
 
 .logout {
-  border: 1px solid black;
-  border-radius: 0 0 0 15px;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
-  background-color: bisque;
   cursor: pointer;
-  font-size: 15px;
-  display: none;
-  position: absolute;
-  z-index: 1;
-  top: 65px;
-  padding: 10px;
 }
 
 .logout:hover {
-  background-color: rgb(255, 205, 143);
-}
-.mail {
-  border: 1px solid black;
-  border-radius: 15px 0 0 15px;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.487);
-  position: absolute;
-  background-color: bisque;
-  font-size: 15px;
-  display: none;
-  z-index: 1;
-  top: 25px;
-  padding: 10px;
+  background-color: #091e420f;
 }
