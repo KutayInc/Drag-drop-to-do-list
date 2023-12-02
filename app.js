@@ -322,7 +322,7 @@ $(document).ready(function () {
   $(".logout").click(function (e) {
     Parse.User.logOut().then(
       function () {
-        window.location.href = "/loginPage/login.html";
+        window.location.href = "./login.html";
       },
       function (error) {
         console.error("Error: " + error.message);
