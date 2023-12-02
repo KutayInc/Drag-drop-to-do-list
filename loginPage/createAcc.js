@@ -4,6 +4,8 @@ Parse.initialize(
 );
 Parse.serverURL = "https://parseapi.back4app.com/";
 
+const validateEmailRegex = /^\S+@\S+\.\S+$/;
+
 async function createParseUser(username, email, password) {
   // Creates a new Parse "User" object, which is created by default in your Parse app
   let user = new Parse.User();
@@ -30,11 +32,18 @@ async function createParseUser(username, email, password) {
   }
 }
 
-// Add on click listener to call the create parse user function
 document.getElementById("signUp").addEventListener("click", async function () {
   var username = document.getElementById("username").value;
   var email = document.getElementById("email").value;
   var password = document.getElementById("password").value;
+  if (!validateEmailRegex.test(email)) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Invalid Email",
+    });
+    return;
+  }
   if (username.length >= 3 && password.length >= 3) {
     createParseUser(username, email, password);
   } else {

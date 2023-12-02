@@ -9,7 +9,7 @@ async function logIn(username, password) {
   var user = Parse.User.logIn(username, password)
     .then(function (user) {
 
-      window.location.href = "/index.html";
+      window.location.href = "/App/index.html";
     })
     .catch(function (error) {
       Swal.fire({

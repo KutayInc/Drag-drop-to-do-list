@@ -17,7 +17,7 @@ $(document).ready(function () {
   }
 
   function getData() {
-    //Giriş yapıldıktan sonra kullanıcıya dair tablo ve kartlar gelir.
+    //After logging in, tables and cards related to the user are shown.
     const query = new Parse.Query("Board");
     if (currentUser) {
       const mail = currentUser.get("email");
@@ -36,7 +36,7 @@ $(document).ready(function () {
                 <div class="removeList"><img src="close-img.png" alt=""></div></div>
                 <div class="rowDiv">
                   <div class="row">
-                    <button class="newCard">Add New Card</button>
+                    <button class="newCard"><i class="fa-solid fa-pencil fa-lg"></i>  Add New Card</button>
                     <input type="text" class="cardInfoInput" style="display: none;" placeholder="Enter card info">
                   </div>
                 </div>
@@ -81,7 +81,7 @@ $(document).ready(function () {
     }
   }
 
-  //drag drop yapılırken liste içeriği güncelleme
+  //updating list content while drag dropping
   $(".content").on("dragstart", ".draggable", function () {
     var oldList = $(this)
       .closest(".addedDiv")
@@ -105,11 +105,10 @@ $(document).ready(function () {
 
   $(".content").sortable({
     start: function (event, ui) {
-      // Sıralama işlemi başladığında çalışacak kod
+      // Code to run when the sorting process starts
       console.log("Sıralama işlemi başladı");
     },
     stop: function (event, ui) {
-      //console.log(objectId);
       updateAddedDivOrder();
       console.log("Sıralama işlemi bitti");
     },
@@ -141,7 +140,7 @@ $(document).ready(function () {
     });
   }
 
-  //Add New List butonu
+  //Add New List button
   $("#newList").click(function (e) {
     $("#listTitleInput").css("display", "inline-block").focus();
   });
@@ -149,7 +148,8 @@ $(document).ready(function () {
   $("#listTitleInput").keypress(async function (e) {
     if (e.which === 13) {
       var title = $(this).val().trim();
-      var order = titles.length + 1;
+      var order = 1;
+
       if (title !== "") {
         var objId = await saveList(title, order);
         var addedDiv = `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
@@ -157,7 +157,7 @@ $(document).ready(function () {
         <div class="removeList"><img src="close-img.png" alt=""></div></div>
         <div class="rowDiv">
           <div class="row">
-            <button class="newCard">Add New Card</button>
+            <button class="newCard"><i class="fa-solid fa-pencil fa-lg"></i>  Add New Card</button>
             <input type="text" class="cardInfoInput" style="display: none;" placeholder="Enter card info">
           </div>
         </div>
@@ -167,6 +167,7 @@ $(document).ready(function () {
         $(".content").disableSelection();
         $(this).val("").css("display", "none");
         titles.unshift(order);
+        updateAddedDivOrder();
         console.log(titles);
       }
     }
@@ -191,7 +192,7 @@ $(document).ready(function () {
     }
   }
 
-  //Add New Card butonu
+  //Add New Card button
   $(".content").on("click", ".newCard", function (e) {
     $(this).siblings(".cardInfoInput").css("display", "inline-block").focus();
 
@@ -248,13 +249,16 @@ $(document).ready(function () {
     });
   }
 
-  //Silme işlemleri için
+  //For delete list and card
   $(".content").on("click", ".removeList", function () {
     var order = $(this).closest(".addedDiv").attr("id");
     var parentList = $(this).closest(".addedDiv");
     var parentListId = parentList.find(".listTitleWrapper").attr("id");
-    $(this).closest(".addedDiv").remove();
-    deleteList(parentList, parentListId, order);
+
+    parentList.fadeOut("slow", function () {
+      $(this).remove();
+      deleteList(parentList, parentListId, order);
+    });
   });
   $(".content").on("click", ".removeCard", function () {
     var removingCard = $(this).closest(".addedCard").text();
@@ -265,7 +269,7 @@ $(document).ready(function () {
   });
 
   function deleteList(parentList, parentListId, order) {
-    $("#cover-spin").show(0);
+    //$("#cover-spin").show(0);
     const board = Parse.Object.extend("Board");
     const query = new Parse.Query(board);
     const deletedTitle = titles.findIndex((item) => item == order);
@@ -276,6 +280,7 @@ $(document).ready(function () {
         object.destroy();
         titles.splice(deletedTitle, 1);
         console.log("deleted");
+        updateAddedDivOrder();
         console.log(titles);
         $("#cover-spin").hide(0);
       } catch (error) {
@@ -313,10 +318,11 @@ $(document).ready(function () {
     });
   }
 
+  //for logout
   $(".logout").click(function (e) {
     Parse.User.logOut().then(
       function () {
-        window.location.href = "login.html";
+        window.location.href = "/loginPage/login.html";
       },
       function (error) {
         console.error("Error: " + error.message);
