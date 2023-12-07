@@ -3,7 +3,7 @@
   font-family: "Roboto", sans-serif;
 }
 
-*{
+* {
   font-family: "Roboto", sans-serif;
 }
 
@@ -97,7 +97,7 @@
   padding-top: 15px;
 }
 
-.listTitleWrapper{
+.listTitleWrapper {
   width: 294px;
   display: flex;
   flex-direction: row;
@@ -105,7 +105,7 @@
   padding: 5px;
 }
 
-.listTitleWrapper h2{
+.listTitleWrapper h2 {
   margin: 11px;
 }
 
@@ -179,7 +179,7 @@
   flex-direction: column;
 }
 
-.row button {
+.newCard {
   width: 200px;
   height: 45px;
   margin: 10px;
@@ -193,23 +193,27 @@
   letter-spacing: 0.05em;
 }
 
-.row button:hover {
+.newCard:hover {
   background-color: #b2c0fc;
 }
 
 .removeList,
 .removeCard {
-  margin: auto 10px
+  margin: auto 10px;
 }
 
 .removeList img,
-.removeCard img {
+.removeCard img,
+.list-close,
+.card-close {
   width: 15px;
   opacity: 0.7;
   cursor: pointer;
 }
 
 .removeList img:hover,
+.card-close:hover,
+.list-close:hover,
 .removeCard img:hover {
   width: 15px;
   opacity: 1;
@@ -315,4 +319,35 @@ input {
 
 .logout:hover {
   background-color: #091e420f;
+}
+
+.list-options, .card-options {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 0 10px;
+}
+
+#listTitleSubmit, .cardSubmit {
+  background-color: #d0d9ff;
+  border: none;
+  cursor: pointer;
+  height: 30px;
+  border-radius: 8px;
+  width: 50%;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+#listTitleSubmit:hover,
+.cardSubmit:hover {
+  background-color: #b2c0fc;
+}
+
+.cardInfoInput{
+  margin-bottom: 3px;
+}
+
+.cardSubmit {
+  margin-top: 5px;
 }

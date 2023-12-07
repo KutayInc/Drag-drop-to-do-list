@@ -7,6 +7,21 @@ Parse.serverURL = "https://parseapi.back4app.com/";
 $(document).ready(function () {
   const currentUser = Parse.User.current();
 
+  let addedDivHtml = `<div class="removeList"><img src="close-img.png" alt=""></div></div>
+  <div class="rowDiv">
+    <div class="row">
+      <button class="newCard"><i class="fa-solid fa-pencil fa-lg"></i>  Add New Card</button>
+      <input type="text" class="cardInfoInput" style="display: none;" placeholder="Enter card info">
+      <div class="card-options">
+      <button class="cardSubmit" style="display: none">Submit</button>
+      <img
+        src="close-img.png"
+        class="card-close"
+        style="display: none"
+      />
+    </div>
+  </div>
+</div>`;
   let mail = "";
   var titles = [];
   if (currentUser) {
@@ -31,16 +46,9 @@ $(document).ready(function () {
             const order = result.get("Order");
             const objId = result.id;
             if (title !== "") {
-              const addedDiv = `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
-                <h2 class="listTitle" >${title}</h2>
-                <div class="removeList"><img src="close-img.png" alt=""></div></div>
-                <div class="rowDiv">
-                  <div class="row">
-                    <button class="newCard"><i class="fa-solid fa-pencil fa-lg"></i>  Add New Card</button>
-                    <input type="text" class="cardInfoInput" style="display: none;" placeholder="Enter card info">
-                  </div>
-                </div>
-              </div>`;
+              const addedDiv =
+                `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
+                <h2 class="listTitle" >${title}</h2>` + addedDivHtml;
               titles.push(order);
               $(".content").append(addedDiv);
               $(".content").sortable();
@@ -143,6 +151,8 @@ $(document).ready(function () {
   //Add New List button
   $("#newList").click(function (e) {
     $("#listTitleInput").css("display", "inline-block").focus();
+    $(".list-close").css("display", "inline-block");
+    $("#listTitleSubmit").css("display", "inline-block");
   });
 
   $("#listTitleInput").keypress(async function (e) {
@@ -152,24 +162,48 @@ $(document).ready(function () {
 
       if (title !== "") {
         var objId = await saveList(title, order);
-        var addedDiv = `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
-        <h2 class="listTitle" >${title}</h2>
-        <div class="removeList"><img src="close-img.png" alt=""></div></div>
-        <div class="rowDiv">
-          <div class="row">
-            <button class="newCard"><i class="fa-solid fa-pencil fa-lg"></i>  Add New Card</button>
-            <input type="text" class="cardInfoInput" style="display: none;" placeholder="Enter card info">
-          </div>
-        </div>
-      </div>`;
+        var addedDiv =
+          `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
+        <h2 class="listTitle" >${title}</h2>` + addedDivHtml;
         $(".content").prepend(addedDiv);
         $(".content").sortable();
         $(".content").disableSelection();
         $(this).val("").css("display", "none");
+        $("#listTitleInput").val("").css("display", "none");
+        $(".list-close").css("display", "none");
+        $("#listTitleSubmit").css("display", "none");
         titles.unshift(order);
         updateAddedDivOrder();
         console.log(titles);
       }
+    }
+  });
+
+  $(".list-close").on("click", function (e) {
+    $("#listTitleInput").val("").css("display", "none");
+    $(".list-close").css("display", "none");
+    $("#listTitleSubmit").css("display", "none");
+  });
+
+  $("#listTitleSubmit").click(async function (e) {
+    var title = $("#listTitleInput").val().trim();
+    var order = 1;
+
+    if (title !== "") {
+      var objId = await saveList(title, order);
+      var addedDiv =
+        `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
+      <h2 class="listTitle" >${title}</h2>` + addedDivHtml;
+      $(".content").prepend(addedDiv);
+      $(".content").sortable();
+      $(".content").disableSelection();
+      $(this).val("").css("display", "none");
+      $("#listTitleInput").val("").css("display", "none");
+      $(".list-close").css("display", "none");
+      $("#listTitleSubmit").css("display", "none");
+      titles.unshift(order);
+      updateAddedDivOrder();
+      console.log(titles);
     }
   });
 
@@ -194,9 +228,11 @@ $(document).ready(function () {
 
   //Add New Card button
   $(".content").on("click", ".newCard", function (e) {
-    $(this).siblings(".cardInfoInput").css("display", "inline-block").focus();
-
     var cardInfoInput = $(this).siblings(".cardInfoInput");
+    var cardOptions = $(this).siblings(".card-options");
+    cardInfoInput.css("display", "inline-block").focus();
+    cardOptions.find(".cardSubmit").css("display", "inline-block");
+    cardOptions.find(".card-close").css("display", "inline-block");
 
     cardInfoInput.keypress(async function (e) {
       if (e.which === 13) {
@@ -223,7 +259,8 @@ $(document).ready(function () {
           });
 
           cardInfoInput.val("").css("display", "none");
-
+          cardOptions.find(".cardSubmit").css("display", "none");
+          cardOptions.find(".card-close").css("display", "none");
           var parentList = $(this).closest(".addedDiv");
           var parentListId = parentList.find(".listTitleWrapper").attr("id");
           saveCard(cardInfo, parentListId);
@@ -231,6 +268,52 @@ $(document).ready(function () {
       }
     });
   });
+
+  $(".content").on("click", ".cardSubmit", async function (e) {
+    var cardInfoInput = $(this).parent().siblings(".cardInfoInput");
+    var cardOptions = $(this).parent(".card-options");
+    var cardInfo = cardInfoInput.val().trim();
+
+    if (cardInfo !== "") {
+      var card =
+        '<div class="addedCard draggable" style="position: relative;">' +
+        cardInfo +
+        '<div class="removeCard"><img src="close-img.png" alt=""></div></div>';
+      $(this).parents(".rowDiv").append(card);
+      $(".rowDiv").sortable();
+      $(".rowDiv").disableSelection();
+      $(".draggable").draggable({
+        cursor: "grabbing",
+        opacity: "0.5",
+        revert: true,
+      });
+      $(".rowDiv").droppable({
+        accept: ".draggable",
+        drop: function (event, ui) {
+          ui.helper.appendTo(this);
+        },
+      });
+
+      cardInfoInput.val("").css("display", "none");
+      cardOptions.find(".cardSubmit").css("display", "none");
+      cardOptions.find(".card-close").css("display", "none");
+      var parentList = $(this).closest(".addedDiv");
+      var parentListId = parentList.find(".listTitleWrapper").attr("id");
+      saveCard(cardInfo, parentListId);
+    }
+  });
+
+  $(".content").on("click", ".card-close", function (e) {
+    $(this).siblings(".cardSubmit").css("display", "none");
+    $(this).css("display", "none");
+    $(this)
+      .parent()
+      .parent()
+      .find(".cardInfoInput")
+      .val("")
+      .css("display", "none");
+  });
+
   function saveCard(cardInfo, parentListId) {
     $("#cover-spin").show(0);
     const board = Parse.Object.extend("Board");
@@ -314,6 +397,7 @@ $(document).ready(function () {
           });
       } catch (error) {
         console.log("Error code: " + error);
+        $("#cover-spin").hide(0);
       }
     });
   }

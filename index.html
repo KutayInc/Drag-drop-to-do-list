@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="todostyle.css" />
     <script
       type="text/javascript"
-      src="https://npmcdn.com/parse/dist/parse.min.js"
+      src="https://npmcdn.com/parse@4.1.0/dist/parse.min.js"
     ></script>
   </head>
   <body>
@@ -36,19 +36,31 @@
         <div class="content"></div>
         <div class="listButton">
           <div class="newListWrapper">
-            <button id="newList"><i class="fa-solid fa-list fa-lg"></i> Add New List</button>
+            <button id="newList">
+              <i class="fa-solid fa-list fa-lg"></i> Add New List
+            </button>
             <input
               type="text"
               id="listTitleInput"
               style="display: none"
               placeholder="Enter list title"
             />
+            <div class="list-options">
+              <button id="listTitleSubmit" style="display: none">Submit</button>
+              <img
+                src="close-img.png"
+                class="list-close"
+                style="display: none"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div id="login" style="display: none"></div>
-    <script src="https://kit.fontawesome.com/dbf374df82.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/dbf374df82.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <script type="module" src="app.js"></script>
