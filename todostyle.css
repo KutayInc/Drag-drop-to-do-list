@@ -351,3 +351,8 @@ input {
 .cardSubmit {
   margin-top: 5px;
 }
+
+.mail{
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

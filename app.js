@@ -34,59 +34,54 @@ $(document).ready(function () {
   function getData() {
     //After logging in, tables and cards related to the user are shown.
     const query = new Parse.Query("Board");
-    if (currentUser) {
-      const mail = currentUser.get("email");
-      query.equalTo("mail", mail);
-      query
-        .find()
-        .then((results) => {
-          results.sort((a, b) => a.get("Order") - b.get("Order"));
-          for (const result of results) {
-            const title = result.get("listName");
-            const order = result.get("Order");
-            const objId = result.id;
-            if (title !== "") {
-              const addedDiv =
-                `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
+    const mail = currentUser.get("email");
+    query.equalTo("mail", mail);
+    query
+      .find()
+      .then((results) => {
+        results.sort((a, b) => a.get("Order") - b.get("Order"));
+        for (const result of results) {
+          const title = result.get("listName");
+          const order = result.get("Order");
+          const objId = result.id;
+          if (title !== "") {
+            const addedDiv =
+              `<div class="addedDiv sortable" id="${order}"><div class="listTitleWrapper" id="${objId}">
                 <h2 class="listTitle" >${title}</h2>` + addedDivHtml;
-              titles.push(order);
-              $(".content").append(addedDiv);
-              $(".content").sortable();
-              $(".content").disableSelection();
-            }
-            var cards = [];
-            cards = result.get("cards");
-            if (cards !== undefined) {
-              for (let i = 0; i < cards.length; i++) {
-                const card = `<div class="addedCard draggable" style="position: relative;">
-                  ${cards[i]}
-                  <div class="removeCard"><img src="close-img.png" alt=""></div>
-                </div>`;
-                $("#" + objId)
-                  .siblings()
-                  .closest(".rowDiv")
-                  .append(card);
-              }
+            titles.push(order);
+            $(".content").append(addedDiv);
+            $(".content").sortable();
+            $(".content").disableSelection();
+          }
+          var cards = [];
+          cards = result.get("cards");
+          if (cards !== undefined) {
+            for (let i = 0; i < cards.length; i++) {
+              const card = `<div class="addedCard draggable" style="position: relative;">${cards[i]}<div class="removeCard"><img src="close-img.png" alt=""></div></div>`;
+              $("#" + objId)
+                .siblings()
+                .closest(".rowDiv")
+                .append(card);
             }
           }
-          $(".rowDiv").sortable();
-          $(".rowDiv").disableSelection();
-          $(".draggable").draggable({
-            cursor: "grabbing",
-            opacity: "0.5",
-            revert: true,
-          });
-          $(".rowDiv").droppable({
-            accept: ".draggable",
-            drop: function (event, ui) {
-              ui.helper.appendTo(this);
-            },
-          });
-        })
-        .catch((error) => {
-          console.error("Error: " + error.message);
+        }
+        $(".rowDiv").sortable();
+        $(".rowDiv").disableSelection();
+        $(".draggable").draggable({
+          cursor: "grabbing",
+          opacity: "0.5",
+          revert: true,
         });
-    }
+        $(".rowDiv").droppable({
+          accept: ".draggable",
+          drop: function (event, ui) {
+            ui.helper.appendTo(this);
+          },
+        });
+      })
+      .catch((error) => {
+        console.error("Error: " + error.message);
+      });
   }
 
   //updating list content while drag dropping
@@ -239,10 +234,7 @@ $(document).ready(function () {
         var cardInfo = cardInfoInput.val().trim();
 
         if (cardInfo !== "") {
-          var card =
-            '<div class="addedCard draggable" style="position: relative;">' +
-            cardInfo +
-            '<div class="removeCard"><img src="close-img.png" alt=""></div></div>';
+          var card = `<div class="addedCard draggable" style="position: relative;">${cardInfo}<div class="removeCard"><img src="close-img.png" alt=""></div></div>`;
           $(this).closest(".rowDiv").append(card);
           $(".rowDiv").sortable();
           $(".rowDiv").disableSelection();
@@ -275,10 +267,7 @@ $(document).ready(function () {
     var cardInfo = cardInfoInput.val().trim();
 
     if (cardInfo !== "") {
-      var card =
-        '<div class="addedCard draggable" style="position: relative;">' +
-        cardInfo +
-        '<div class="removeCard"><img src="close-img.png" alt=""></div></div>';
+      var card = `<div class="addedCard draggable" style="position: relative;">${cardInfo}<div class="removeCard"><img src="close-img.png" alt=""></div></div>`;
       $(this).parents(".rowDiv").append(card);
       $(".rowDiv").sortable();
       $(".rowDiv").disableSelection();
@@ -380,6 +369,8 @@ $(document).ready(function () {
     const board = Parse.Object.extend("Board");
     const query = new Parse.Query(board);
     query.equalTo("objectId", parentListId);
+    console.log(parentListId);
+    console.log(removingCard);
     query.first().then(function (object) {
       try {
         let cards = object.get("cards");
